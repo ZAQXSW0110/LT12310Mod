@@ -1,35 +1,41 @@
-name: Build Dylib
+name: Build iOS Tweak DYLIB
+
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: macos-latest
-    permissions:
-      contents: read
+    runs-on: macos-latest  # 使用GitHub提供的macOS环境
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Install Theos
-        run: |
-          git clone https://github.com/theos/theos.git ~/theos
-          echo "THEOS=~/theos" >> $GITHUB_ENV
+    - name: Set up Theos环境
+      run: |
+        # 安装Theos依赖
+        brew install git make perl curl wget
+        git clone -b windows https://github.com/coolstar/theos.git /opt/theos
+        echo "export THEOS=/opt/theos" >> $GITHUB_ENV
+        echo "export PATH=$THEOS/bin:$PATH" >> $GITHUB_ENV
 
-      - name: Install SDK
-        run: |
-          cd ~/theos
-          git clone https://github.com/theos/sdks.git sdks
+    - name: Install iOS工具链
+      run: |
+        # 从Xcode提取SDK（需提前准备）
+        mkdir -p $THEOS/sdks
+        # 将iPhoneOS17.6.sdk.tar.gz上传至仓库的sdks目录
+        tar -xzf sdks/iPhoneOS17.6.sdk.tar.gz -C $THEOS/sdks
 
-      - name: Build
-        run: |
-          make clean
-          make
+    - name: Compile Tweak
+      run: |
+        # 执行Makefile编译
+        make package FINALPACKAGE=1
 
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: result
-          path: .theos/obj/*.dylib
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ThunderHack.dylib
+        path: ./obj/debug/ThunderHack.dylib
