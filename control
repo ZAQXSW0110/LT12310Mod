@@ -1,0 +1,10 @@
+Package: com.lt.12310.mod
+Name: LT12310Mod
+Version: 1.0
+Architecture: iphoneos-arm64
+Description: 雷霆战机1.23.10 无敌秒杀无限暴走无限冲刺过检测
+Maintainer: Mod
+Author: Mod
+Depends: mobilesubstrate
+Section: Tweak
+Priority: optional
