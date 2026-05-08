@@ -1,6 +1,9 @@
 ARCHS = arm64
-TARGET = iphone:clang:15.5:15.0
+TARGET = iphone:clang:15.0:15.0
 INSTALL_TARGET_PROCESSES = 雷霆战机:集结
+
+# 关键：强制指定SDK路径，避免Theos找不到
+SYSROOT = $(THEOS)/sdks/iPhoneOS15.0.sdk
 
 include $(THEOS)/makefiles/common.mk
 
