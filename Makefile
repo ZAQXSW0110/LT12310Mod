@@ -1,5 +1,5 @@
 ARCHS = arm64
-TARGET = iphone:clang:16.0:15.0
+TARGET = iphone:clang:15.0:15.0
 INSTALL_TARGET_PROCESSES = 雷霆战机:集结
 
 include $(THEOS)/makefiles/common.mk
